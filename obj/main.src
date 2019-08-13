@@ -1,0 +1,217 @@
+; Zilog eZ80 ANSI C Compiler Release 3.4
+; -optsize -noreduceopt -nomodsect -peephole -globalopt
+; -localcse -const=ROM 
+	FILE	"SRC\MAIN.C"
+	.assume ADL=1
+	SEGMENT CODE
+;    1	/*
+;    2	 *--------------------------------------
+;    3	 * Program Name:
+;    4	 * Author:
+;    5	 * License:
+;    6	 * Description:
+;    7	 *--------------------------------------
+;    8	*/
+;    9	
+;   10	/* Keep these headers */
+;   11	#include <stdbool.h>
+;   12	#include <stddef.h>
+;   13	#include <stdint.h>
+;   14	#include <tice.h>
+;   15	
+;   16	/* Standard headers (recommended) */
+;   17	#include <math.h>
+;   18	#include <stdio.h>
+;   19	#include <stdlib.h>
+;   20	#include <string.h>
+;   21	#include <graphx.h>
+;   22	#include "gfx/logo_gfx.h"
+;   23	#define FONT_HEIGHT 8
+;   24	/* Put your function prototypes here */
+;   25	void dispSprite_Centered(gfx_sprite_t *sprite);
+;   26	void dispText(char *text);
+;   27	/* Put all your globals here */
+;   28	
+;   29	void main(void) {
+_main:
+	LD	HL,-3
+	CALL	__frameset
+;   30	       	char *time = "00.00";
+	LD	BC,L__0
+	LD	(IX+-3),BC
+;   31		gfx_Begin();
+	CALL	_gfx_Begin
+;   32		gfx_SetPalette(logo_gfx_pal, sizeof_logo_gfx_pal, 0);
+	LD	BC,0
+	PUSH	BC
+	LD	BC,512
+	PUSH	BC
+	LD	BC,_logo_gfx_pal
+	PUSH	BC
+	CALL	_gfx_SetPalette
+	POP	BC
+	POP	BC
+	POP	BC
+;   33		gfx_SetTextFGColor(255);
+	LD	BC,255
+	PUSH	BC
+	CALL	_gfx_SetTextFGColor
+	POP	BC
+;   34		gfx_FillScreen(0);
+	LD	BC,0
+	PUSH	BC
+	CALL	_gfx_FillScreen
+	POP	BC
+;   35		gfx_SetTextTransparentColor(0);
+	LD	BC,0
+	PUSH	BC
+	CALL	_gfx_SetTextTransparentColor
+	POP	BC
+;   36		gfx_SetTextBGColor(0);
+	LD	BC,0
+	PUSH	BC
+	CALL	_gfx_SetTextBGColor
+	POP	BC
+;   37		dispSprite_Centered(rubikcube);
+	LD	BC,_rubikcube_data
+	PUSH	BC
+	CALL	_dispSprite_Centered
+	POP	BC
+;   38		dispText(time);
+	LD	BC,(IX+-3)
+	PUSH	BC
+	CALL	_dispText
+	POP	BC
+;   39		while (!os_GetCSC());
+L_1:
+	CALL	_os_GetCSC
+	OR	A,A
+	JR	Z,L_1
+;   40		gfx_End();
+	CALL	_gfx_End
+;   41	
+;   42	}
+	LD	SP,IX
+	POP	IX
+	RET	
+
+
+;**************************** _main ***************************
+;Name                         Addr/Register   Size   Type
+;_gfx_End                            IMPORT  -----   function
+;_os_GetCSC                          IMPORT  -----   function
+;_dispText                           IMPORT  -----   function
+;_rubikcube_data                     IMPORT   3602   variable
+;_dispSprite_Centered                IMPORT  -----   function
+;_gfx_SetTextBGColor                 IMPORT  -----   function
+;_gfx_SetTextTransparentColor        IMPORT  -----   function
+;_gfx_FillScreen                     IMPORT  -----   function
+;_gfx_SetTextFGColor                 IMPORT  -----   function
+;_logo_gfx_pal                       IMPORT    512   variable
+;_gfx_SetPalette                     IMPORT  -----   function
+;_gfx_Begin                          IMPORT  -----   function
+;time                                  IX-3      3   variable
+
+
+; Stack Frame Size: 9 (bytes)
+;       Spill Code: 0 (instruction)
+
+
+	SEGMENT STRSECT
+L__0:
+	DB	"00.00"
+	DB	0
+	SEGMENT CODE
+;   43	
+;   44	/* Put other functions here */
+;   45	void dispSprite_Centered(gfx_sprite_t *sprite) {
+_dispSprite_Centered:
+	CALL	__frameset0
+;   46		gfx_Sprite(sprite, (LCD_WIDTH - 60) / 2, (LCD_HEIGHT - 60) / 2);
+	LD	BC,90
+	PUSH	BC
+	LD	BC,130
+	PUSH	BC
+	LD	BC,(IX+6)
+	PUSH	BC
+	CALL	_gfx_Sprite
+	POP	BC
+	POP	BC
+	POP	BC
+;   47	}
+	LD	SP,IX
+	POP	IX
+	RET	
+
+
+;**************************** _dispSprite_Centered ***************************
+;Name                         Addr/Register   Size   Type
+;_gfx_Sprite                         IMPORT  -----   function
+;sprite                                IX+6      3   parameter
+
+
+; Stack Frame Size: 9 (bytes)
+;       Spill Code: 0 (instruction)
+
+
+;   48	
+;   49	void dispText(char *text) {
+_dispText:
+	CALL	__frameset0
+;   50		gfx_PrintStringXY(text, (LCD_WIDTH - gfx_GetStringWidth(text)) / 2, (LCD_HEIGHT - FONT_HEIGHT) / 2+60);
+	LD	BC,176
+	PUSH	BC
+	LD	BC,(IX+6)
+	PUSH	BC
+	CALL	_gfx_GetStringWidth
+	POP	BC
+	LD	BC,HL
+	LD	HL,320
+	OR	A,A
+	SBC	HL,BC
+	LD	A,1
+	CALL	__ishru_b
+	PUSH	HL
+	LD	BC,(IX+6)
+	PUSH	BC
+	CALL	_gfx_PrintStringXY
+	POP	BC
+	POP	BC
+	POP	BC
+;   51	}
+	LD	SP,IX
+	POP	IX
+	RET	
+
+
+;**************************** _dispText ***************************
+;Name                         Addr/Register   Size   Type
+;_gfx_GetStringWidth                 IMPORT  -----   function
+;_gfx_PrintStringXY                  IMPORT  -----   function
+;text                                  IX+6      3   parameter
+
+
+; Stack Frame Size: 9 (bytes)
+;       Spill Code: 0 (instruction)
+
+
+	XREF _logo_gfx_pal:ROM
+	XREF _rubikcube_data:ROM
+	XREF _gfx_GetStringWidth:ROM
+	XREF _gfx_Sprite:ROM
+	XREF _gfx_SetTextTransparentColor:ROM
+	XREF _gfx_SetTextBGColor:ROM
+	XREF _gfx_SetTextFGColor:ROM
+	XREF _gfx_PrintStringXY:ROM
+	XREF _gfx_FillScreen:ROM
+	XREF _gfx_SetPalette:ROM
+	XREF _gfx_End:ROM
+	XREF _gfx_Begin:ROM
+	XREF _os_GetCSC:ROM
+	XREF __frameset0:ROM
+	XREF __frameset:ROM
+	XREF __ishru_b:ROM
+	XDEF _dispText
+	XDEF _dispSprite_Centered
+	XDEF _main
+	END
