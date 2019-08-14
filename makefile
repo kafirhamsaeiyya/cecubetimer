@@ -8,7 +8,7 @@
 NAME        ?= CUBE
 COMPRESSED  ?= NO
 ICON        ?= iconc.png
-DESCRIPTION ?= "C SDK Demo"
+DESCRIPTION ?= "A simple cube timer for the TI-84 Plus CE"
 
 # ----------------------------
 

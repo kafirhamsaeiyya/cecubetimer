@@ -26,5 +26,5 @@ __program_icon:
  db 094h,094h,094h,094h,094h,094h,094h,094h,094h,094h,094h,094h,094h,094h,094h,094h
 
 __program_description:
- db "C SDK Demo",0
+ db "A simple cube timer for the TI-84 Plus CE",0
 __program_description_end:
