@@ -29,6 +29,7 @@ void print_TextCentered(char *text);
 
 void main(void) {
 	char *cubewelcome = "Cube Timer";
+	real_t cubeFinish_time;
 	gfx_Begin();
 	gfx_SetPalette(logo_gfx_pal, sizeof_logo_gfx_pal, 0);
 	gfx_SetTextFGColor(255);
@@ -45,6 +46,7 @@ void main(void) {
 	do {
 		float elapsed = (float)atomic_load_increasing_32(&timer_1_Counter) / 32768;
 		print_Time(elapsed);
+	       	cubeFinish_time = os_FloatToReal(elapsed);
 
 	} while (!os_GetCSC());
 	while (!os_GetCSC());

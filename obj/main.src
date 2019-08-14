@@ -35,14 +35,15 @@
 ;   29	
 ;   30	void main(void) {
 _main:
-	LD	HL,-7
+	LD	HL,-25
 	CALL	__frameset
 ;   31		char *cubewelcome = "Cube Timer";
 	LD	BC,L__0
-	LD	(IX+-3),BC
-;   32		gfx_Begin();
+	LD	(IX+-7),BC
+;   32		real_t cubeFinish_time;
+;   33		gfx_Begin();
 	CALL	_gfx_Begin
-;   33		gfx_SetPalette(logo_gfx_pal, sizeof_logo_gfx_pal, 0);
+;   34		gfx_SetPalette(logo_gfx_pal, sizeof_logo_gfx_pal, 0);
 	LD	BC,0
 	PUSH	BC
 	LD	BC,512
@@ -53,37 +54,37 @@ _main:
 	POP	BC
 	POP	BC
 	POP	BC
-;   34		gfx_SetTextFGColor(255);
+;   35		gfx_SetTextFGColor(255);
 	LD	BC,255
 	PUSH	BC
 	CALL	_gfx_SetTextFGColor
 	POP	BC
-;   35		gfx_FillScreen(0);
+;   36		gfx_FillScreen(0);
 	LD	BC,0
 	PUSH	BC
 	CALL	_gfx_FillScreen
 	POP	BC
-;   36		gfx_SetTextTransparentColor(1);
+;   37		gfx_SetTextTransparentColor(1);
 	LD	BC,1
 	PUSH	BC
 	CALL	_gfx_SetTextTransparentColor
 	POP	BC
-;   37		gfx_SetTextBGColor(0);
+;   38		gfx_SetTextBGColor(0);
 	LD	BC,0
 	PUSH	BC
 	CALL	_gfx_SetTextBGColor
 	POP	BC
-;   38		print_TextCentered(cubewelcome);
-	LD	BC,(IX+-3)
+;   39		print_TextCentered(cubewelcome);
+	LD	BC,(IX+-7)
 	PUSH	BC
 	CALL	_print_TextCentered
 	POP	BC
-;   39		dispSprite_Centered(rubikcube);
+;   40		dispSprite_Centered(rubikcube);
 	LD	BC,_rubikcube_data
 	PUSH	BC
 	CALL	_dispSprite_Centered
 	POP	BC
-;   40		print_Time(0.0f);
+;   41		print_Time(0.0f);
 	LD	C,0
 	LD	B,0
 	PUSH	BC
@@ -92,29 +93,29 @@ _main:
 	CALL	_print_Time
 	POP	BC
 	POP	BC
-;   41		timer_Control = TIMER1_DISABLE;
+;   42		timer_Control = TIMER1_DISABLE;
 	LD	HL,15859760
 	LD	(HL),0
 	INC	HL
 	LD	(HL),0
-;   42		timer_1_Counter = 0;
+;   43		timer_1_Counter = 0;
 	LD	BC,0
 	LD	(15859712),BC
 	XOR	A,A
 	LD	(15859715),A
-;   43		while (!os_GetCSC());
+;   44		while (!os_GetCSC());
 L_1:
 	CALL	_os_GetCSC
 	OR	A,A
 	JR	Z,L_1
-;   44		timer_Control = TIMER1_ENABLE | TIMER1_32K | TIMER1_UP;	
+;   45		timer_Control = TIMER1_ENABLE | TIMER1_32K | TIMER1_UP;	
 	LD	HL,15859760
 	LD	(HL),3
 	INC	HL
 	LD	(HL),2
-;   45		do {
+;   46		do {
 L_3:
-;   46			float elapsed = (float)atomic_load_increasing_32(&timer_1_Counter) / 32768;
+;   47			float elapsed = (float)atomic_load_increasing_32(&timer_1_Counter) / 32768;
 	LD	BC,15859712
 	PUSH	BC
 	CALL	_atomic_load_increasing_32
@@ -126,31 +127,45 @@ L_3:
 	SBC	HL,HL
 	LD	E,71
 	CALL	__fdiv
-	LD	(IX+-7),BC
-	LD	(IX+-4),A
-;   47			print_Time(elapsed);
-	LD	C,(IX+-4)
+	LD	(IX+-4),BC
+	LD	(IX+-1),A
+;   48			print_Time(elapsed);
+	LD	C,(IX+-1)
 	LD	B,0
 	PUSH	BC
-	LD	BC,(IX+-7)
+	LD	BC,(IX+-4)
 	PUSH	BC
 	CALL	_print_Time
 	POP	BC
 	POP	BC
-;   48	
-;   49		} while (!os_GetCSC());
+;   49		       	cubeFinish_time = os_FloatToReal(elapsed);
+	LD	C,(IX+-1)
+	LD	B,0
+	PUSH	BC
+	LD	BC,(IX+-4)
+	PUSH	BC
+	PEA	IX+-25
+	CALL	_os_FloatToReal
+	POP	BC
+	POP	BC
+	POP	BC
+	LEA	DE,IX+-16
+	LD	BC,9
+	LDIR	
+;   50	
+;   51		} while (!os_GetCSC());
 	CALL	_os_GetCSC
 	OR	A,A
 	JR	Z,L_3
-;   50		while (!os_GetCSC());
+;   52		while (!os_GetCSC());
 L_5:
 	CALL	_os_GetCSC
 	OR	A,A
 	JR	Z,L_5
-;   51		gfx_End();
+;   53		gfx_End();
 	CALL	_gfx_End
-;   52	
-;   53	}
+;   54	
+;   55	}
 	LD	SP,IX
 	POP	IX
 	RET	
@@ -159,6 +174,7 @@ L_5:
 ;**************************** _main ***************************
 ;Name                         Addr/Register   Size   Type
 ;_gfx_End                            IMPORT  -----   function
+;_os_FloatToReal                     IMPORT  -----   function
 ;_atomic_load_increasing_32          IMPORT  -----   function
 ;_os_GetCSC                          IMPORT  -----   function
 ;_print_Time                         IMPORT  -----   function
@@ -172,11 +188,12 @@ L_5:
 ;_logo_gfx_pal                       IMPORT    512   variable
 ;_gfx_SetPalette                     IMPORT  -----   function
 ;_gfx_Begin                          IMPORT  -----   function
-;elapsed                               IX-7      4   variable
-;cubewelcome                           IX-3      3   variable
+;cubeFinish_time                      IX-16      9   variable
+;cubewelcome                           IX-7      3   variable
+;elapsed                               IX-4      4   variable
 
 
-; Stack Frame Size: 13 (bytes)
+; Stack Frame Size: 31 (bytes)
 ;       Spill Code: 0 (instruction)
 
 
@@ -185,12 +202,12 @@ L__0:
 	DB	"Cube Timer"
 	DB	0
 	SEGMENT CODE
-;   54	
-;   55	/* Put other functions here */
-;   56	void dispSprite_Centered(gfx_sprite_t *sprite) {
+;   56	
+;   57	/* Put other functions here */
+;   58	void dispSprite_Centered(gfx_sprite_t *sprite) {
 _dispSprite_Centered:
 	CALL	__frameset0
-;   57		gfx_Sprite(sprite, (LCD_WIDTH - 60) / 2, (LCD_HEIGHT - 60) / 2);
+;   59		gfx_Sprite(sprite, (LCD_WIDTH - 60) / 2, (LCD_HEIGHT - 60) / 2);
 	LD	BC,90
 	PUSH	BC
 	LD	BC,130
@@ -201,7 +218,7 @@ _dispSprite_Centered:
 	POP	BC
 	POP	BC
 	POP	BC
-;   58	}
+;   60	}
 	LD	SP,IX
 	POP	IX
 	RET	
@@ -217,14 +234,14 @@ _dispSprite_Centered:
 ;       Spill Code: 0 (instruction)
 
 
-;   59	
-;   60	void print_Time(float elapsed) {
+;   61	
+;   62	void print_Time(float elapsed) {
 _print_Time:
 	LD	HL,-32
 	CALL	__frameset
-;   61		real_t elapsed_real;
-;   62		char str[10];
-;   63		elapsed_real = os_FloatToReal(elapsed <= 0.001f ? 0.0f : elapsed);
+;   63		real_t elapsed_real;
+;   64		char str[10];
+;   65		elapsed_real = os_FloatToReal(elapsed <= 0.001f ? 0.0f : elapsed);
 	LD	HL,8589935
 	LD	E,58
 	LD	BC,(IX+6)
@@ -253,7 +270,7 @@ L_14:
 	POP	BC
 	POP	BC
 	LEA	DE,IX+-13
-;   64		os_RealToStr(str, &elapsed_real, 8, 1, 2);
+;   66		os_RealToStr(str, &elapsed_real, 8, 1, 2);
 	LD	BC,2
 	PUSH	BC
 	LD	BC,1
@@ -270,7 +287,7 @@ L_14:
 	POP	BC
 	POP	BC
 	POP	BC
-;   65		gfx_PrintStringXY(str, (LCD_WIDTH - gfx_GetStringWidth(str)) / 2, (LCD_HEIGHT - FONT_HEIGHT) / 2+60);
+;   67		gfx_PrintStringXY(str, (LCD_WIDTH - gfx_GetStringWidth(str)) / 2, (LCD_HEIGHT - FONT_HEIGHT) / 2+60);
 	LD	BC,176
 	PUSH	BC
 	PEA	IX+-23
@@ -288,8 +305,8 @@ L_14:
 	POP	BC
 	POP	BC
 	POP	BC
-;   66	
-;   67	}
+;   68	
+;   69	}
 	LD	SP,IX
 	POP	IX
 	RET	
@@ -311,11 +328,11 @@ L_14:
 ;       Spill Code: 0 (instruction)
 
 
-;   68	
-;   69	void print_TextCentered(char *text) {
+;   70	
+;   71	void print_TextCentered(char *text) {
 _print_TextCentered:
 	CALL	__frameset0
-;   70		gfx_PrintStringXY(text, (LCD_WIDTH - gfx_GetStringWidth(text)) / 2, (LCD_HEIGHT - FONT_HEIGHT) / 2-60);
+;   72		gfx_PrintStringXY(text, (LCD_WIDTH - gfx_GetStringWidth(text)) / 2, (LCD_HEIGHT - FONT_HEIGHT) / 2-60);
 	LD	BC,56
 	PUSH	BC
 	LD	BC,(IX+6)
@@ -335,7 +352,7 @@ _print_TextCentered:
 	POP	BC
 	POP	BC
 	POP	BC
-;   71	}
+;   73	}
 	LD	SP,IX
 	POP	IX
 	RET	
