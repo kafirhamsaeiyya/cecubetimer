@@ -5,7 +5,7 @@
 # Set COMPRESSED to "YES" to create a compressed program
 # ----------------------------
 
-NAME        ?= DEMO
+NAME        ?= CUBE
 COMPRESSED  ?= NO
 ICON        ?= iconc.png
 DESCRIPTION ?= "C SDK Demo"
