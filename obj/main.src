@@ -30,15 +30,19 @@
 ;   24	/* Put your function prototypes here */
 ;   25	void dispSprite_Centered(gfx_sprite_t *sprite);
 ;   26	void print_Time(float elasped);
-;   27	/* Put all your globals here */
-;   28	
-;   29	void main(void) {
+;   27	void print_TextCentered(char *text);
+;   28	/* Put all your globals here */
+;   29	
+;   30	void main(void) {
 _main:
-	LD	HL,-4
+	LD	HL,-7
 	CALL	__frameset
-;   30		gfx_Begin();
+;   31		char *cubewelcome = "Cube Timer";
+	LD	BC,L__0
+	LD	(IX+-3),BC
+;   32		gfx_Begin();
 	CALL	_gfx_Begin
-;   31		gfx_SetPalette(logo_gfx_pal, sizeof_logo_gfx_pal, 0);
+;   33		gfx_SetPalette(logo_gfx_pal, sizeof_logo_gfx_pal, 0);
 	LD	BC,0
 	PUSH	BC
 	LD	BC,512
@@ -49,32 +53,37 @@ _main:
 	POP	BC
 	POP	BC
 	POP	BC
-;   32		gfx_SetTextFGColor(255);
+;   34		gfx_SetTextFGColor(255);
 	LD	BC,255
 	PUSH	BC
 	CALL	_gfx_SetTextFGColor
 	POP	BC
-;   33		gfx_FillScreen(0);
+;   35		gfx_FillScreen(0);
 	LD	BC,0
 	PUSH	BC
 	CALL	_gfx_FillScreen
 	POP	BC
-;   34		gfx_SetTextTransparentColor(1);
+;   36		gfx_SetTextTransparentColor(1);
 	LD	BC,1
 	PUSH	BC
 	CALL	_gfx_SetTextTransparentColor
 	POP	BC
-;   35		gfx_SetTextBGColor(0);
+;   37		gfx_SetTextBGColor(0);
 	LD	BC,0
 	PUSH	BC
 	CALL	_gfx_SetTextBGColor
 	POP	BC
-;   36		dispSprite_Centered(rubikcube);
+;   38		print_TextCentered(cubewelcome);
+	LD	BC,(IX+-3)
+	PUSH	BC
+	CALL	_print_TextCentered
+	POP	BC
+;   39		dispSprite_Centered(rubikcube);
 	LD	BC,_rubikcube_data
 	PUSH	BC
 	CALL	_dispSprite_Centered
 	POP	BC
-;   37		print_Time(0.0f);
+;   40		print_Time(0.0f);
 	LD	C,0
 	LD	B,0
 	PUSH	BC
@@ -83,29 +92,29 @@ _main:
 	CALL	_print_Time
 	POP	BC
 	POP	BC
-;   38		timer_Control = TIMER1_DISABLE;
+;   41		timer_Control = TIMER1_DISABLE;
 	LD	HL,15859760
 	LD	(HL),0
 	INC	HL
 	LD	(HL),0
-;   39		timer_1_Counter = 0;
+;   42		timer_1_Counter = 0;
 	LD	BC,0
 	LD	(15859712),BC
 	XOR	A,A
 	LD	(15859715),A
-;   40		while (!os_GetCSC());
+;   43		while (!os_GetCSC());
 L_1:
 	CALL	_os_GetCSC
 	OR	A,A
 	JR	Z,L_1
-;   41		timer_Control = TIMER1_ENABLE | TIMER1_32K | TIMER1_UP;	
+;   44		timer_Control = TIMER1_ENABLE | TIMER1_32K | TIMER1_UP;	
 	LD	HL,15859760
 	LD	(HL),3
 	INC	HL
 	LD	(HL),2
-;   42		do {
+;   45		do {
 L_3:
-;   43			float elapsed = (float)atomic_load_increasing_32(&timer_1_Counter) / 32768;
+;   46			float elapsed = (float)atomic_load_increasing_32(&timer_1_Counter) / 32768;
 	LD	BC,15859712
 	PUSH	BC
 	CALL	_atomic_load_increasing_32
@@ -117,31 +126,31 @@ L_3:
 	SBC	HL,HL
 	LD	E,71
 	CALL	__fdiv
-	LD	(IX+-4),BC
-	LD	(IX+-1),A
-;   44			print_Time(elapsed);
-	LD	C,(IX+-1)
+	LD	(IX+-7),BC
+	LD	(IX+-4),A
+;   47			print_Time(elapsed);
+	LD	C,(IX+-4)
 	LD	B,0
 	PUSH	BC
-	LD	BC,(IX+-4)
+	LD	BC,(IX+-7)
 	PUSH	BC
 	CALL	_print_Time
 	POP	BC
 	POP	BC
-;   45	
-;   46		} while (!os_GetCSC());
+;   48	
+;   49		} while (!os_GetCSC());
 	CALL	_os_GetCSC
 	OR	A,A
 	JR	Z,L_3
-;   47		while (!os_GetCSC());
+;   50		while (!os_GetCSC());
 L_5:
 	CALL	_os_GetCSC
 	OR	A,A
 	JR	Z,L_5
-;   48		gfx_End();
+;   51		gfx_End();
 	CALL	_gfx_End
-;   49	
-;   50	}
+;   52	
+;   53	}
 	LD	SP,IX
 	POP	IX
 	RET	
@@ -155,6 +164,7 @@ L_5:
 ;_print_Time                         IMPORT  -----   function
 ;_rubikcube_data                     IMPORT   3602   variable
 ;_dispSprite_Centered                IMPORT  -----   function
+;_print_TextCentered                 IMPORT  -----   function
 ;_gfx_SetTextBGColor                 IMPORT  -----   function
 ;_gfx_SetTextTransparentColor        IMPORT  -----   function
 ;_gfx_FillScreen                     IMPORT  -----   function
@@ -162,19 +172,25 @@ L_5:
 ;_logo_gfx_pal                       IMPORT    512   variable
 ;_gfx_SetPalette                     IMPORT  -----   function
 ;_gfx_Begin                          IMPORT  -----   function
-;elapsed                               IX-4      4   variable
+;elapsed                               IX-7      4   variable
+;cubewelcome                           IX-3      3   variable
 
 
-; Stack Frame Size: 10 (bytes)
+; Stack Frame Size: 13 (bytes)
 ;       Spill Code: 0 (instruction)
 
 
-;   51	
-;   52	/* Put other functions here */
-;   53	void dispSprite_Centered(gfx_sprite_t *sprite) {
+	SEGMENT STRSECT
+L__0:
+	DB	"Cube Timer"
+	DB	0
+	SEGMENT CODE
+;   54	
+;   55	/* Put other functions here */
+;   56	void dispSprite_Centered(gfx_sprite_t *sprite) {
 _dispSprite_Centered:
 	CALL	__frameset0
-;   54		gfx_Sprite(sprite, (LCD_WIDTH - 60) / 2, (LCD_HEIGHT - 60) / 2);
+;   57		gfx_Sprite(sprite, (LCD_WIDTH - 60) / 2, (LCD_HEIGHT - 60) / 2);
 	LD	BC,90
 	PUSH	BC
 	LD	BC,130
@@ -185,7 +201,7 @@ _dispSprite_Centered:
 	POP	BC
 	POP	BC
 	POP	BC
-;   55	}
+;   58	}
 	LD	SP,IX
 	POP	IX
 	RET	
@@ -201,14 +217,14 @@ _dispSprite_Centered:
 ;       Spill Code: 0 (instruction)
 
 
-;   56	
-;   57	void print_Time(float elapsed) {
+;   59	
+;   60	void print_Time(float elapsed) {
 _print_Time:
 	LD	HL,-32
 	CALL	__frameset
-;   58		real_t elapsed_real;
-;   59		char str[10];
-;   60		elapsed_real = os_FloatToReal(elapsed <= 0.001f ? 0.0f : elapsed);
+;   61		real_t elapsed_real;
+;   62		char str[10];
+;   63		elapsed_real = os_FloatToReal(elapsed <= 0.001f ? 0.0f : elapsed);
 	LD	HL,8589935
 	LD	E,58
 	LD	BC,(IX+6)
@@ -237,7 +253,7 @@ L_14:
 	POP	BC
 	POP	BC
 	LEA	DE,IX+-13
-;   61		os_RealToStr(str, &elapsed_real, 8, 1, 2);
+;   64		os_RealToStr(str, &elapsed_real, 8, 1, 2);
 	LD	BC,2
 	PUSH	BC
 	LD	BC,1
@@ -254,7 +270,7 @@ L_14:
 	POP	BC
 	POP	BC
 	POP	BC
-;   62		gfx_PrintStringXY(str, (LCD_WIDTH - gfx_GetStringWidth(str)) / 2, (LCD_HEIGHT - FONT_HEIGHT) / 2+60);
+;   65		gfx_PrintStringXY(str, (LCD_WIDTH - gfx_GetStringWidth(str)) / 2, (LCD_HEIGHT - FONT_HEIGHT) / 2+60);
 	LD	BC,176
 	PUSH	BC
 	PEA	IX+-23
@@ -272,8 +288,8 @@ L_14:
 	POP	BC
 	POP	BC
 	POP	BC
-;   63	
-;   64	}
+;   66	
+;   67	}
 	LD	SP,IX
 	POP	IX
 	RET	
@@ -292,6 +308,47 @@ L_14:
 
 
 ; Stack Frame Size: 44 (bytes)
+;       Spill Code: 0 (instruction)
+
+
+;   68	
+;   69	void print_TextCentered(char *text) {
+_print_TextCentered:
+	CALL	__frameset0
+;   70		gfx_PrintStringXY(text, (LCD_WIDTH - gfx_GetStringWidth(text)) / 2, (LCD_HEIGHT - FONT_HEIGHT) / 2-60);
+	LD	BC,56
+	PUSH	BC
+	LD	BC,(IX+6)
+	PUSH	BC
+	CALL	_gfx_GetStringWidth
+	POP	BC
+	LD	BC,HL
+	LD	HL,320
+	OR	A,A
+	SBC	HL,BC
+	LD	A,1
+	CALL	__ishru_b
+	PUSH	HL
+	LD	BC,(IX+6)
+	PUSH	BC
+	CALL	_gfx_PrintStringXY
+	POP	BC
+	POP	BC
+	POP	BC
+;   71	}
+	LD	SP,IX
+	POP	IX
+	RET	
+
+
+;**************************** _print_TextCentered ***************************
+;Name                         Addr/Register   Size   Type
+;_gfx_GetStringWidth                 IMPORT  -----   function
+;_gfx_PrintStringXY                  IMPORT  -----   function
+;text                                  IX+6      3   parameter
+
+
+; Stack Frame Size: 9 (bytes)
 ;       Spill Code: 0 (instruction)
 
 
@@ -317,6 +374,7 @@ L_14:
 	XREF __frameset0:ROM
 	XREF __frameset:ROM
 	XREF __ishru_b:ROM
+	XDEF _print_TextCentered
 	XDEF _print_Time
 	XDEF _dispSprite_Centered
 	XDEF _main

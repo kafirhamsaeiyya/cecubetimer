@@ -6,10 +6,10 @@ libs     D1AA0B D1AA46            3Bh
 startup  D1AA46 D1AA85            3Fh
 cleanup  D1AA85 D1AA99            14h
 exit     D1AA99 D1AA9F             6h
-code     D1AA9F D1AC8D           1EEh
-data     D1AC8D D1BCC1          1034h
-strsect  D1BCC1 D1BCC1             0h
-text     D1BCC1 D1BCC1             0h
+code     D1AA9F D1ACCF           230h
+data     D1ACCF D1BD03          1034h
+strsect  D1BD03 D1BD0E             Bh
+text     D1BD0E D1BD0E             0h
 bss      D031F6 D031F6 D13FD6      0h
 header   D1A87F D1A882             3h
 
@@ -149,10 +149,11 @@ _exit                        = D1AA9B
 __exit                       = D1AA74
 __exitsp                     = D1AA74
 __errsp                      = D1AA74
-_rubikcube_data              = D1ACAF
-_logo_gfx_pal                = D1BAC1
-_print_Time                  = D1ABF1
-_dispSprite_Centered         = D1ABD3
+_rubikcube_data              = D1ACF1
+_logo_gfx_pal                = D1BB03
+_print_TextCentered          = D1AC9D
+_print_Time                  = D1AC01
+_dispSprite_Centered         = D1ABE3
 _main                        = D1AB01
 _gfx_Begin                   = D1AA1E
 _gfx_End                     = D1AA22

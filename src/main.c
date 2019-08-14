@@ -24,15 +24,18 @@
 /* Put your function prototypes here */
 void dispSprite_Centered(gfx_sprite_t *sprite);
 void print_Time(float elasped);
+void print_TextCentered(char *text);
 /* Put all your globals here */
 
 void main(void) {
+	char *cubewelcome = "Cube Timer";
 	gfx_Begin();
 	gfx_SetPalette(logo_gfx_pal, sizeof_logo_gfx_pal, 0);
 	gfx_SetTextFGColor(255);
 	gfx_FillScreen(0);
 	gfx_SetTextTransparentColor(1);
 	gfx_SetTextBGColor(0);
+	print_TextCentered(cubewelcome);
 	dispSprite_Centered(rubikcube);
 	print_Time(0.0f);
 	timer_Control = TIMER1_DISABLE;
@@ -61,4 +64,8 @@ void print_Time(float elapsed) {
 	os_RealToStr(str, &elapsed_real, 8, 1, 2);
 	gfx_PrintStringXY(str, (LCD_WIDTH - gfx_GetStringWidth(str)) / 2, (LCD_HEIGHT - FONT_HEIGHT) / 2+60);
 
+}
+
+void print_TextCentered(char *text) {
+	gfx_PrintStringXY(text, (LCD_WIDTH - gfx_GetStringWidth(text)) / 2, (LCD_HEIGHT - FONT_HEIGHT) / 2-60);
 }
