@@ -6,10 +6,10 @@ libs     D1AA0B D1AA46            3Bh
 startup  D1AA46 D1AA85            3Fh
 cleanup  D1AA85 D1AA99            14h
 exit     D1AA99 D1AA9F             6h
-code     D1AA9F D1ABA0           101h
-data     D1ABA0 D1BBD4          1034h
-strsect  D1BBD4 D1BBDA             6h
-text     D1BBDA D1BBDA             0h
+code     D1AA9F D1AC8D           1EEh
+data     D1AC8D D1BCC1          1034h
+strsect  D1BCC1 D1BCC1             0h
+text     D1BCC1 D1BCC1             0h
 bss      D031F6 D031F6 D13FD6      0h
 header   D1A87F D1A882             3h
 
@@ -131,10 +131,14 @@ _asm_DisableAPD              = 021134
 _asm_EnableAPD               = 021138
 _asm_DrawStatusBar           = 021A3C
 _asm_ArcChk                  = 022040
-__frameset0                  = D1AAC3
+_atomic_load_increasing_32   = D1AAC3
+__frameset0                  = D1AAE8
+__fdiv                       = 000278
+__ultof                      = 000280
 __ishru_b                    = 000184
 __ishru_b                    = 000188
-__frameset                   = D1AACE
+__fcmp                       = 000274
+__frameset                   = D1AAF3
 __findlibload                = D1A9B3
 __program_icon               = D1A887
 __program_description        = D1A989
@@ -145,11 +149,11 @@ _exit                        = D1AA9B
 __exit                       = D1AA74
 __exitsp                     = D1AA74
 __errsp                      = D1AA74
-_rubikcube_data              = D1ABC2
-_logo_gfx_pal                = D1B9D4
-_dispText                    = D1AB6E
-_dispSprite_Centered         = D1AB50
-_main                        = D1AADC
+_rubikcube_data              = D1ACAF
+_logo_gfx_pal                = D1BAC1
+_print_Time                  = D1ABF1
+_dispSprite_Centered         = D1ABD3
+_main                        = D1AB01
 _gfx_Begin                   = D1AA1E
 _gfx_End                     = D1AA22
 _gfx_SetPalette              = D1AA26
