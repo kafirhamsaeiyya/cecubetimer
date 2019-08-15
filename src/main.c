@@ -56,7 +56,6 @@ void main(void) {
 	free(times_List);
 	while (!os_GetCSC());	
 	gfx_End();
-
 }
 
 /* Put other functions here */
