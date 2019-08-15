@@ -50,7 +50,7 @@ void main(void) {
 	       	cubeFinish_time = os_FloatToReal(elapsed);
 
 	} while (!os_GetCSC());
-	times_List = ti_MallocList(1);
+	times_List = ti_MallocList(5);
 	times_List->items[0] = cubeFinish_time;
 	ti_SetVar(TI_REAL_LIST_TYPE, ti_L1, times_List);
 	free(times_List);

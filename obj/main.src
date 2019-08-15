@@ -158,10 +158,10 @@ L_3:
 	CALL	_os_GetCSC
 	OR	A,A
 	JR	Z,L_3
-;   53		times_List = ti_MallocList(1);
+;   53		times_List = ti_MallocList(5);
 	LD	BC,_malloc
 	PUSH	BC
-	LD	BC,1
+	LD	BC,5
 	PUSH	BC
 	CALL	_ti_AllocList
 	POP	BC
