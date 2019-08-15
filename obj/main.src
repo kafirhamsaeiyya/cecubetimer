@@ -6,10 +6,10 @@
 	SEGMENT CODE
 ;    1	/*
 ;    2	 *--------------------------------------
-;    3	 * Program Name:
-;    4	 * Author:
-;    5	 * License:
-;    6	 * Description:
+;    3	 * Program Name: CUBE
+;    4	 * Author: De2290 aka kafirhamsaeiyya
+;    5	 * License: GNU GPLv3
+;    6	 * Description: A simple cube timer for the TI84 Plus CE
 ;    7	 *--------------------------------------
 ;    8	*/
 ;    9	

@@ -1,9 +1,9 @@
 /*
  *--------------------------------------
- * Program Name:
- * Author:
- * License:
- * Description:
+ * Program Name: CUBE
+ * Author: De2290 aka kafirhamsaeiyya
+ * License: GNU GPLv3
+ * Description: A simple cube timer for the TI84 Plus CE
  *--------------------------------------
 */
 
