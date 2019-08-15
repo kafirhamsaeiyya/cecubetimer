@@ -5,4 +5,5 @@ To build, just clone the repository, and make sure to have the CE Toolchain inst
 Then just run 
 `make gfx`
 and then
-`make`
+`make`.
+This now supports storing one time into L1. 
