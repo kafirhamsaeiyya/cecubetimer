@@ -189,18 +189,15 @@ L_3:
 	PUSH	BC
 	CALL	_free
 	POP	BC
-;   57		while (!os_GetCSC());
+;   57		while (!os_GetCSC());	
 L_7:
 	CALL	_os_GetCSC
 	OR	A,A
 	JR	Z,L_7
-;   58	
-;   59	
-;   60		
-;   61		gfx_End();
+;   58		gfx_End();
 	CALL	_gfx_End
-;   62	
-;   63	}
+;   59	
+;   60	}
 	LD	SP,IX
 	POP	IX
 	RET	
@@ -245,12 +242,12 @@ L__3:
 	DB	"]"
 	DB	0,0,0
 	SEGMENT CODE
-;   64	
-;   65	/* Put other functions here */
-;   66	void dispSprite_Centered(gfx_sprite_t *sprite) {
+;   61	
+;   62	/* Put other functions here */
+;   63	void dispSprite_Centered(gfx_sprite_t *sprite) {
 _dispSprite_Centered:
 	CALL	__frameset0
-;   67		gfx_Sprite(sprite, (LCD_WIDTH - 60) / 2, (LCD_HEIGHT - 60) / 2);
+;   64		gfx_Sprite(sprite, (LCD_WIDTH - 60) / 2, (LCD_HEIGHT - 60) / 2);
 	LD	BC,90
 	PUSH	BC
 	LD	BC,130
@@ -261,7 +258,7 @@ _dispSprite_Centered:
 	POP	BC
 	POP	BC
 	POP	BC
-;   68	}
+;   65	}
 	LD	SP,IX
 	POP	IX
 	RET	
@@ -277,14 +274,14 @@ _dispSprite_Centered:
 ;       Spill Code: 0 (instruction)
 
 
-;   69	
-;   70	void print_Time(float elapsed) {
+;   66	
+;   67	void print_Time(float elapsed) {
 _print_Time:
 	LD	HL,-32
 	CALL	__frameset
-;   71		real_t elapsed_real;
-;   72		char str[10];
-;   73		elapsed_real = os_FloatToReal(elapsed <= 0.001f ? 0.0f : elapsed);
+;   68		real_t elapsed_real;
+;   69		char str[10];
+;   70		elapsed_real = os_FloatToReal(elapsed <= 0.001f ? 0.0f : elapsed);
 	LD	HL,8589935
 	LD	E,58
 	LD	BC,(IX+6)
@@ -313,7 +310,7 @@ L_14:
 	POP	BC
 	POP	BC
 	LEA	DE,IX+-13
-;   74		os_RealToStr(str, &elapsed_real, 8, 1, 2);
+;   71		os_RealToStr(str, &elapsed_real, 8, 1, 2);
 	LD	BC,2
 	PUSH	BC
 	LD	BC,1
@@ -330,7 +327,7 @@ L_14:
 	POP	BC
 	POP	BC
 	POP	BC
-;   75		gfx_PrintStringXY(str, (LCD_WIDTH - gfx_GetStringWidth(str)) / 2, (LCD_HEIGHT - FONT_HEIGHT) / 2+60);
+;   72		gfx_PrintStringXY(str, (LCD_WIDTH - gfx_GetStringWidth(str)) / 2, (LCD_HEIGHT - FONT_HEIGHT) / 2+60);
 	LD	BC,176
 	PUSH	BC
 	PEA	IX+-23
@@ -348,8 +345,8 @@ L_14:
 	POP	BC
 	POP	BC
 	POP	BC
-;   76	
-;   77	}
+;   73	
+;   74	}
 	LD	SP,IX
 	POP	IX
 	RET	
@@ -371,11 +368,11 @@ L_14:
 ;       Spill Code: 0 (instruction)
 
 
-;   78	
-;   79	void print_TextCentered(char *text) {
+;   75	
+;   76	void print_TextCentered(char *text) {
 _print_TextCentered:
 	CALL	__frameset0
-;   80		gfx_PrintStringXY(text, (LCD_WIDTH - gfx_GetStringWidth(text)) / 2, (LCD_HEIGHT - FONT_HEIGHT) / 2-60);
+;   77		gfx_PrintStringXY(text, (LCD_WIDTH - gfx_GetStringWidth(text)) / 2, (LCD_HEIGHT - FONT_HEIGHT) / 2-60);
 	LD	BC,56
 	PUSH	BC
 	LD	BC,(IX+6)
@@ -395,7 +392,7 @@ _print_TextCentered:
 	POP	BC
 	POP	BC
 	POP	BC
-;   81	}
+;   78	}
 	LD	SP,IX
 	POP	IX
 	RET	

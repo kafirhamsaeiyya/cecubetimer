@@ -54,10 +54,7 @@ void main(void) {
 	times_List->items[0] = cubeFinish_time;
 	ti_SetVar(TI_REAL_LIST_TYPE, ti_L1, times_List);
 	free(times_List);
-	while (!os_GetCSC());
-
-
-	
+	while (!os_GetCSC());	
 	gfx_End();
 
 }
@@ -79,3 +76,4 @@ void print_Time(float elapsed) {
 void print_TextCentered(char *text) {
 	gfx_PrintStringXY(text, (LCD_WIDTH - gfx_GetStringWidth(text)) / 2, (LCD_HEIGHT - FONT_HEIGHT) / 2-60);
 }
+
