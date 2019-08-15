@@ -2,21 +2,21 @@ Segment  Base   Top    High   Length
 -------- ------ ------ ------ -------
 icon     D1A882 D1A9B3           131h
 launcher D1A9B3 D1AA0B            58h
-libs     D1AA0B D1AA46            3Bh
-startup  D1AA46 D1AA85            3Fh
-cleanup  D1AA85 D1AA99            14h
-exit     D1AA99 D1AA9F             6h
-code     D1AA9F D1ACEC           24Dh
-data     D1ACEC D1BD20          1034h
-strsect  D1BD20 D1BD2B             Bh
-text     D1BD2B D1BD2B             0h
-bss      D031F6 D031F6 D13FD6      0h
+libs     D1AA0B D1AA58            4Dh
+startup  D1AA58 D1AA97            3Fh
+cleanup  D1AA97 D1AAAB            14h
+exit     D1AAAB D1AAB1             6h
+code     D1AAB1 D1AF35           484h
+data     D1AF35 D1BF6C          1037h
+strsect  D1BF6C D1BF7B             Fh
+text     D1BF7B D1BF7B             0h
+bss      D031F6 D031FC D13FD6      6h
 header   D1A87F D1A882             3h
 
 Label                          Value
 ----------------------------   ------
-_os_DisableHomeTextBuffer    = D1AA9F
-_os_EnableHomeTextBuffer     = D1AAB1
+_os_DisableHomeTextBuffer    = D1AAB1
+_os_EnableHomeTextBuffer     = D1AAC3
 _boot_GetBootMajorVer        = 000080
 _boot_GetHardwareVer         = 000084
 _boot_GetBootMinorVer        = 00008C
@@ -131,37 +131,44 @@ _asm_DisableAPD              = 021134
 _asm_EnableAPD               = 021138
 _asm_DrawStatusBar           = 021A3C
 _asm_ArcChk                  = 022040
-_atomic_load_increasing_32   = D1AAC3
-__frameset0                  = D1AAE8
+_atomic_load_increasing_32   = D1AAD5
+__frameset0                  = D1AAFA
 __fdiv                       = 000278
 __ultof                      = 000280
+__icmpzero                   = 000138
 __ishru_b                    = 000184
 __ishru_b                    = 000188
+__s_sbrk                     = D1AB05
 __fcmp                       = 000274
-__frameset                   = D1AAF3
+__frameset                   = D1AB25
+_free                        = D1AB33
+_malloc                      = D1AC62
+__alloc_base                 = D031F6
 __findlibload                = D1A9B3
 __program_icon               = D1A887
 __program_description        = D1A989
-__ccleanup                   = D1AA85
+__ccleanup                   = D1AA97
 _errno                       = D008DC
 _init                        = D1A882
-_exit                        = D1AA9B
-__exit                       = D1AA74
-__exitsp                     = D1AA74
-__errsp                      = D1AA74
-_rubikcube_data              = D1AD0E
-_logo_gfx_pal                = D1BB20
-_print_TextCentered          = D1ACBA
-_print_Time                  = D1AC1E
-_dispSprite_Centered         = D1AC00
-_main                        = D1AB01
-_gfx_Begin                   = D1AA1E
-_gfx_End                     = D1AA22
-_gfx_SetPalette              = D1AA26
-_gfx_FillScreen              = D1AA2A
-_gfx_PrintStringXY           = D1AA2E
-_gfx_SetTextBGColor          = D1AA32
-_gfx_SetTextFGColor          = D1AA36
-_gfx_SetTextTransparentColor = D1AA3A
-_gfx_GetStringWidth          = D1AA3E
-_gfx_Sprite                  = D1AA42
+_exit                        = D1AAAD
+__exit                       = D1AA86
+__exitsp                     = D1AA86
+__errsp                      = D1AA86
+_rubikcube_data              = D1AF5A
+_logo_gfx_pal                = D1BD6C
+_print_TextCentered          = D1AF03
+_print_Time                  = D1AE67
+_dispSprite_Centered         = D1AE49
+_main                        = D1AD0A
+_ti_SetVar                   = D1AA1F
+_ti_AllocList                = D1AA23
+_gfx_Begin                   = D1AA30
+_gfx_End                     = D1AA34
+_gfx_SetPalette              = D1AA38
+_gfx_FillScreen              = D1AA3C
+_gfx_PrintStringXY           = D1AA40
+_gfx_SetTextBGColor          = D1AA44
+_gfx_SetTextFGColor          = D1AA48
+_gfx_SetTextTransparentColor = D1AA4C
+_gfx_GetStringWidth          = D1AA50
+_gfx_Sprite                  = D1AA54

@@ -30,6 +30,7 @@ void print_TextCentered(char *text);
 void main(void) {
 	char *cubewelcome = "Cube Timer";
 	real_t cubeFinish_time;
+	list_t *times_List;
 	gfx_Begin();
 	gfx_SetPalette(logo_gfx_pal, sizeof_logo_gfx_pal, 0);
 	gfx_SetTextFGColor(255);
@@ -49,7 +50,14 @@ void main(void) {
 	       	cubeFinish_time = os_FloatToReal(elapsed);
 
 	} while (!os_GetCSC());
+	times_List = ti_MallocList(1);
+	times_List->items[0] = cubeFinish_time;
+	ti_SetVar(TI_REAL_LIST_TYPE, ti_L1, times_List);
+	free(times_List);
 	while (!os_GetCSC());
+
+
+	
 	gfx_End();
 
 }

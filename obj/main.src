@@ -35,15 +35,16 @@
 ;   29	
 ;   30	void main(void) {
 _main:
-	LD	HL,-25
+	LD	HL,-28
 	CALL	__frameset
 ;   31		char *cubewelcome = "Cube Timer";
 	LD	BC,L__0
-	LD	(IX+-7),BC
+	LD	(IX+-6),BC
 ;   32		real_t cubeFinish_time;
-;   33		gfx_Begin();
+;   33		list_t *times_List;
+;   34		gfx_Begin();
 	CALL	_gfx_Begin
-;   34		gfx_SetPalette(logo_gfx_pal, sizeof_logo_gfx_pal, 0);
+;   35		gfx_SetPalette(logo_gfx_pal, sizeof_logo_gfx_pal, 0);
 	LD	BC,0
 	PUSH	BC
 	LD	BC,512
@@ -54,37 +55,37 @@ _main:
 	POP	BC
 	POP	BC
 	POP	BC
-;   35		gfx_SetTextFGColor(255);
+;   36		gfx_SetTextFGColor(255);
 	LD	BC,255
 	PUSH	BC
 	CALL	_gfx_SetTextFGColor
 	POP	BC
-;   36		gfx_FillScreen(0);
+;   37		gfx_FillScreen(0);
 	LD	BC,0
 	PUSH	BC
 	CALL	_gfx_FillScreen
 	POP	BC
-;   37		gfx_SetTextTransparentColor(1);
+;   38		gfx_SetTextTransparentColor(1);
 	LD	BC,1
 	PUSH	BC
 	CALL	_gfx_SetTextTransparentColor
 	POP	BC
-;   38		gfx_SetTextBGColor(0);
+;   39		gfx_SetTextBGColor(0);
 	LD	BC,0
 	PUSH	BC
 	CALL	_gfx_SetTextBGColor
 	POP	BC
-;   39		print_TextCentered(cubewelcome);
-	LD	BC,(IX+-7)
+;   40		print_TextCentered(cubewelcome);
+	LD	BC,(IX+-6)
 	PUSH	BC
 	CALL	_print_TextCentered
 	POP	BC
-;   40		dispSprite_Centered(rubikcube);
+;   41		dispSprite_Centered(rubikcube);
 	LD	BC,_rubikcube_data
 	PUSH	BC
 	CALL	_dispSprite_Centered
 	POP	BC
-;   41		print_Time(0.0f);
+;   42		print_Time(0.0f);
 	LD	C,0
 	LD	B,0
 	PUSH	BC
@@ -93,29 +94,29 @@ _main:
 	CALL	_print_Time
 	POP	BC
 	POP	BC
-;   42		timer_Control = TIMER1_DISABLE;
+;   43		timer_Control = TIMER1_DISABLE;
 	LD	HL,15859760
 	LD	(HL),0
 	INC	HL
 	LD	(HL),0
-;   43		timer_1_Counter = 0;
+;   44		timer_1_Counter = 0;
 	LD	BC,0
 	LD	(15859712),BC
 	XOR	A,A
 	LD	(15859715),A
-;   44		while (!os_GetCSC());
+;   45		while (!os_GetCSC());
 L_1:
 	CALL	_os_GetCSC
 	OR	A,A
 	JR	Z,L_1
-;   45		timer_Control = TIMER1_ENABLE | TIMER1_32K | TIMER1_UP;	
+;   46		timer_Control = TIMER1_ENABLE | TIMER1_32K | TIMER1_UP;	
 	LD	HL,15859760
 	LD	(HL),3
 	INC	HL
 	LD	(HL),2
-;   46		do {
+;   47		do {
 L_3:
-;   47			float elapsed = (float)atomic_load_increasing_32(&timer_1_Counter) / 32768;
+;   48			float elapsed = (float)atomic_load_increasing_32(&timer_1_Counter) / 32768;
 	LD	BC,15859712
 	PUSH	BC
 	CALL	_atomic_load_increasing_32
@@ -127,45 +128,79 @@ L_3:
 	SBC	HL,HL
 	LD	E,71
 	CALL	__fdiv
-	LD	(IX+-4),BC
-	LD	(IX+-1),A
-;   48			print_Time(elapsed);
-	LD	C,(IX+-1)
+	LD	(IX+-10),BC
+	LD	(IX+-7),A
+;   49			print_Time(elapsed);
+	LD	C,(IX+-7)
 	LD	B,0
 	PUSH	BC
-	LD	BC,(IX+-4)
+	LD	BC,(IX+-10)
 	PUSH	BC
 	CALL	_print_Time
 	POP	BC
 	POP	BC
-;   49		       	cubeFinish_time = os_FloatToReal(elapsed);
-	LD	C,(IX+-1)
+;   50		       	cubeFinish_time = os_FloatToReal(elapsed);
+	LD	C,(IX+-7)
 	LD	B,0
 	PUSH	BC
-	LD	BC,(IX+-4)
+	LD	BC,(IX+-10)
 	PUSH	BC
-	PEA	IX+-25
+	PEA	IX+-28
 	CALL	_os_FloatToReal
 	POP	BC
 	POP	BC
 	POP	BC
-	LEA	DE,IX+-16
+	LEA	DE,IX+-19
 	LD	BC,9
 	LDIR	
-;   50	
-;   51		} while (!os_GetCSC());
+;   51	
+;   52		} while (!os_GetCSC());
 	CALL	_os_GetCSC
 	OR	A,A
 	JR	Z,L_3
-;   52		while (!os_GetCSC());
-L_5:
+;   53		times_List = ti_MallocList(1);
+	LD	BC,_malloc
+	PUSH	BC
+	LD	BC,1
+	PUSH	BC
+	CALL	_ti_AllocList
+	POP	BC
+	POP	BC
+	LD	(IX+-3),HL
+;   54		times_List->items[0] = cubeFinish_time;
+	LD	IY,(IX+-3)
+	LEA	DE,IY+2
+	LEA	HL,IX+-19
+	LD	BC,9
+	LDIR	
+;   55		ti_SetVar(TI_REAL_LIST_TYPE, ti_L1, times_List);
+	LD	BC,(IX+-3)
+	PUSH	BC
+	LD	BC,L__3
+	PUSH	BC
+	LD	BC,1
+	PUSH	BC
+	CALL	_ti_SetVar
+	POP	BC
+	POP	BC
+	POP	BC
+;   56		free(times_List);
+	LD	BC,(IX+-3)
+	PUSH	BC
+	CALL	_free
+	POP	BC
+;   57		while (!os_GetCSC());
+L_7:
 	CALL	_os_GetCSC
 	OR	A,A
-	JR	Z,L_5
-;   53		gfx_End();
+	JR	Z,L_7
+;   58	
+;   59	
+;   60		
+;   61		gfx_End();
 	CALL	_gfx_End
-;   54	
-;   55	}
+;   62	
+;   63	}
 	LD	SP,IX
 	POP	IX
 	RET	
@@ -174,6 +209,10 @@ L_5:
 ;**************************** _main ***************************
 ;Name                         Addr/Register   Size   Type
 ;_gfx_End                            IMPORT  -----   function
+;_free                               IMPORT  -----   function
+;_ti_SetVar                          IMPORT  -----   function
+;_malloc                             IMPORT  -----   function
+;_ti_AllocList                       IMPORT  -----   function
 ;_os_FloatToReal                     IMPORT  -----   function
 ;_atomic_load_increasing_32          IMPORT  -----   function
 ;_os_GetCSC                          IMPORT  -----   function
@@ -188,12 +227,13 @@ L_5:
 ;_logo_gfx_pal                       IMPORT    512   variable
 ;_gfx_SetPalette                     IMPORT  -----   function
 ;_gfx_Begin                          IMPORT  -----   function
-;cubeFinish_time                      IX-16      9   variable
-;cubewelcome                           IX-7      3   variable
-;elapsed                               IX-4      4   variable
+;cubeFinish_time                      IX-19      9   variable
+;elapsed                              IX-10      4   variable
+;cubewelcome                           IX-6      3   variable
+;times_List                            IX-3      3   variable
 
 
-; Stack Frame Size: 31 (bytes)
+; Stack Frame Size: 34 (bytes)
 ;       Spill Code: 0 (instruction)
 
 
@@ -201,13 +241,16 @@ L_5:
 L__0:
 	DB	"Cube Timer"
 	DB	0
+L__3:
+	DB	"]"
+	DB	0,0,0
 	SEGMENT CODE
-;   56	
-;   57	/* Put other functions here */
-;   58	void dispSprite_Centered(gfx_sprite_t *sprite) {
+;   64	
+;   65	/* Put other functions here */
+;   66	void dispSprite_Centered(gfx_sprite_t *sprite) {
 _dispSprite_Centered:
 	CALL	__frameset0
-;   59		gfx_Sprite(sprite, (LCD_WIDTH - 60) / 2, (LCD_HEIGHT - 60) / 2);
+;   67		gfx_Sprite(sprite, (LCD_WIDTH - 60) / 2, (LCD_HEIGHT - 60) / 2);
 	LD	BC,90
 	PUSH	BC
 	LD	BC,130
@@ -218,7 +261,7 @@ _dispSprite_Centered:
 	POP	BC
 	POP	BC
 	POP	BC
-;   60	}
+;   68	}
 	LD	SP,IX
 	POP	IX
 	RET	
@@ -234,14 +277,14 @@ _dispSprite_Centered:
 ;       Spill Code: 0 (instruction)
 
 
-;   61	
-;   62	void print_Time(float elapsed) {
+;   69	
+;   70	void print_Time(float elapsed) {
 _print_Time:
 	LD	HL,-32
 	CALL	__frameset
-;   63		real_t elapsed_real;
-;   64		char str[10];
-;   65		elapsed_real = os_FloatToReal(elapsed <= 0.001f ? 0.0f : elapsed);
+;   71		real_t elapsed_real;
+;   72		char str[10];
+;   73		elapsed_real = os_FloatToReal(elapsed <= 0.001f ? 0.0f : elapsed);
 	LD	HL,8589935
 	LD	E,58
 	LD	BC,(IX+6)
@@ -270,7 +313,7 @@ L_14:
 	POP	BC
 	POP	BC
 	LEA	DE,IX+-13
-;   66		os_RealToStr(str, &elapsed_real, 8, 1, 2);
+;   74		os_RealToStr(str, &elapsed_real, 8, 1, 2);
 	LD	BC,2
 	PUSH	BC
 	LD	BC,1
@@ -287,7 +330,7 @@ L_14:
 	POP	BC
 	POP	BC
 	POP	BC
-;   67		gfx_PrintStringXY(str, (LCD_WIDTH - gfx_GetStringWidth(str)) / 2, (LCD_HEIGHT - FONT_HEIGHT) / 2+60);
+;   75		gfx_PrintStringXY(str, (LCD_WIDTH - gfx_GetStringWidth(str)) / 2, (LCD_HEIGHT - FONT_HEIGHT) / 2+60);
 	LD	BC,176
 	PUSH	BC
 	PEA	IX+-23
@@ -305,8 +348,8 @@ L_14:
 	POP	BC
 	POP	BC
 	POP	BC
-;   68	
-;   69	}
+;   76	
+;   77	}
 	LD	SP,IX
 	POP	IX
 	RET	
@@ -328,11 +371,11 @@ L_14:
 ;       Spill Code: 0 (instruction)
 
 
-;   70	
-;   71	void print_TextCentered(char *text) {
+;   78	
+;   79	void print_TextCentered(char *text) {
 _print_TextCentered:
 	CALL	__frameset0
-;   72		gfx_PrintStringXY(text, (LCD_WIDTH - gfx_GetStringWidth(text)) / 2, (LCD_HEIGHT - FONT_HEIGHT) / 2-60);
+;   80		gfx_PrintStringXY(text, (LCD_WIDTH - gfx_GetStringWidth(text)) / 2, (LCD_HEIGHT - FONT_HEIGHT) / 2-60);
 	LD	BC,56
 	PUSH	BC
 	LD	BC,(IX+6)
@@ -352,7 +395,7 @@ _print_TextCentered:
 	POP	BC
 	POP	BC
 	POP	BC
-;   73	}
+;   81	}
 	LD	SP,IX
 	POP	IX
 	RET	
@@ -381,6 +424,10 @@ _print_TextCentered:
 	XREF _gfx_SetPalette:ROM
 	XREF _gfx_End:ROM
 	XREF _gfx_Begin:ROM
+	XREF _ti_AllocList:ROM
+	XREF _ti_SetVar:ROM
+	XREF _free:ROM
+	XREF _malloc:ROM
 	XREF _os_GetCSC:ROM
 	XREF _os_RealToStr:ROM
 	XREF _os_FloatToReal:ROM
